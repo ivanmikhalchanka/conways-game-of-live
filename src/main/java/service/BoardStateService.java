@@ -2,6 +2,7 @@ package service;
 
 import static java.util.stream.Collectors.partitioningBy;
 
+import common.ComputationDelayEmulator;
 import java.util.List;
 import java.util.Map;
 import model.Board;
@@ -25,6 +26,9 @@ public class BoardStateService {
     Board result = new Board(this.board.getNumOfRows(), this.board.getNumOfColumns());
     aliveCells.get(true).forEach(result::born);
     aliveCells.get(false).forEach(result::kill);
+
+    ComputationDelayEmulator.emulateComputationDelay(
+        this.board.getNumOfRows() * this.board.getNumOfColumns());
 
     return result;
   }
