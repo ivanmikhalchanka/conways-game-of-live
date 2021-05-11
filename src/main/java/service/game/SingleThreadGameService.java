@@ -1,35 +1,28 @@
 package service.game;
 
-import java.util.HashSet;
-import java.util.Set;
 import model.Board;
-import model.Cell;
+import model.CachingBoard;
 import renderer.BoardRenderer;
-import service.state.BoardStateService;
+import service.state.BoardPartStateService;
 
 public class SingleThreadGameService implements GameService {
-  private final Set<Board> history = new HashSet<>();
-  private Board board;
-
   private final BoardRenderer renderer;
+  private final BoardPartStateService boardPartStateService;
+  private final CachingBoard board;
 
   public SingleThreadGameService(Board board, BoardRenderer renderer) {
-    this.board = board;
+    this.board = new CachingBoard(board);
     this.renderer = renderer;
+    this.boardPartStateService = new BoardPartStateService(this.board.getPartToProcess(1, 0));
   }
 
   @Override
   public void start() {
-    while (!gameOver(board)) {
-      history.add(board);
+    while (!board.hasConverged()) {
+      board.commitChanges();
       renderer.render(board);
 
-      board = new BoardStateService(board).calculateNextState();
+      boardPartStateService.moveToNextState(board);
     }
-  }
-
-  boolean gameOver(Board board) {
-    return Cell.buildCells(board.getNumOfRows(), board.getNumOfColumns()).noneMatch(board::isAlive)
-        || history.contains(board);
   }
 }

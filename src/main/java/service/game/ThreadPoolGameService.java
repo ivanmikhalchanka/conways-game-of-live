@@ -7,17 +7,16 @@ import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import model.Board;
 import model.CachingBoard;
 import renderer.BoardRenderer;
-import service.state.BoardPartStateService;
+import service.state.RunnableBoardPartStateService;
 
 public class ThreadPoolGameService implements GameService {
   private final CachingBoard board;
   private final CyclicBarrier barrier;
   private final BoardRenderer renderer;
-  private final List<BoardPartStateService> partStateServices;
+  private final List<RunnableBoardPartStateService> partStateServices;
 
   public ThreadPoolGameService(Board board, BoardRenderer renderer) {
     this.board = new CachingBoard(board);
@@ -29,12 +28,12 @@ public class ThreadPoolGameService implements GameService {
     partStateServices =
         range(0, availableProcessors)
             .mapToObj(index -> this.board.getPartToProcess(availableProcessors, index))
-            .map(cellsToProcess -> new BoardPartStateService(barrier, this.board, cellsToProcess))
+            .map(cellsToProcess -> new RunnableBoardPartStateService(barrier, this.board, cellsToProcess))
             .collect(toList());
   }
 
   void renderNewChanges() {
-    board.commitNewValues();
+    board.commitChanges();
     renderer.render(board);
   }
 
@@ -45,11 +44,6 @@ public class ThreadPoolGameService implements GameService {
     ExecutorService pool = Executors.newFixedThreadPool(partStateServices.size());
     partStateServices.forEach(pool::submit);
 
-    try {
-      pool.awaitTermination(1, TimeUnit.MINUTES);
-      pool.shutdown();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    pool.shutdown();
   }
 }

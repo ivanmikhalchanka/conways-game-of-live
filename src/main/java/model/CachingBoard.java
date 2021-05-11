@@ -5,45 +5,52 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CachingBoard extends Board {
-  private final List<Board> history = new ArrayList<>();
+public class CachingBoard implements Board {
+  private final List<SimpleBoard> history = new ArrayList<>();
+  private final SimpleBoard uncommittedChanges;
 
-  private final Board cache;
+  private SimpleBoard board;
 
   public CachingBoard(Board board) {
-    super(board.getNumOfRows(), board.getNumOfColumns());
-    cache = board;
-    this.commitNewValues();
+    this.uncommittedChanges = new SimpleBoard(board);
+    this.commitChanges();
+  }
+
+  @Override
+  public int getNumOfRows() {
+    return board.getNumOfRows();
+  }
+
+  @Override
+  public int getNumOfColumns() {
+    return board.getNumOfColumns();
   }
 
   @Override
   public void born(Cell cell) {
-    cache.born(cell);
+    uncommittedChanges.born(cell);
   }
 
   @Override
   public void kill(Cell cell) {
-    cache.kill(cell);
+    uncommittedChanges.kill(cell);
   }
 
-  public void commitNewValues() {
-    history.add(new Board(cache));
-
-    Map<Boolean, List<Cell>> cellsByAliveFlag =
-        Cell.buildCells(getNumOfRows(), getNumOfColumns())
-            .collect(Collectors.partitioningBy(cache::isAlive));
-
-    cellsByAliveFlag.get(true).forEach(super::born);
-    cellsByAliveFlag.get(false).forEach(super::kill);
+  @Override
+  public boolean isAlive(Cell cell) {
+    return board.isAlive(cell);
   }
 
-  public boolean hasConverged() {
-    return Cell.buildCells(getNumOfRows(), getNumOfColumns()).noneMatch(cache::isAlive)
-        || history.stream().limit(history.size() - 1).collect(toSet()).contains(cache);
+  @Override
+  public List<Cell> getNeighbours(Cell cell) {
+    return board.getNeighbours(cell);
+  }
+
+  public void commitChanges() {
+    board = new SimpleBoard(this.uncommittedChanges);
+    history.add(board);
   }
 
   public List<Cell> getPartToProcess(int total, int index) {
@@ -56,5 +63,18 @@ public class CachingBoard extends Board {
     return total > index + 1
         ? cells.limit(cellsPerPartition).collect(toList())
         : cells.collect(toList());
+  }
+
+  public boolean hasConverged() {
+    return allDead() || stateRepeated();
+  }
+
+  boolean allDead() {
+    return Cell.buildCells(getNumOfRows(), getNumOfColumns())
+        .noneMatch(uncommittedChanges::isAlive);
+  }
+
+  boolean stateRepeated() {
+    return history.stream().limit(history.size() - 1).collect(toSet()).contains(uncommittedChanges);
   }
 }

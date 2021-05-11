@@ -13,7 +13,7 @@ public class Cell {
     return range(0, numOfRows).boxed().flatMap(row -> buildCellsRow(row, numOfCols));
   }
 
-  static Stream<Cell> buildCellsRow(int row, int numOfCols) {
+  public static Stream<Cell> buildCellsRow(int row, int numOfCols) {
     return range(0, numOfCols).mapToObj(col -> new Cell(row, col));
   }
 

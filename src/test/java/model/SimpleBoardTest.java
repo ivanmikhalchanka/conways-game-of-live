@@ -12,11 +12,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class BoardTest {
+class SimpleBoardTest {
   @ParameterizedTest
   @MethodSource("neighboursArguments")
   void testRetrieveNeighboursState(Cell cell, List<Cell> neighbours) {
-    Board board = givenDefaultBoard();
+    SimpleBoard board = givenDefaultBoard();
 
     List<Cell> result = board.getNeighbours(cell);
 
@@ -41,8 +41,8 @@ class BoardTest {
   // ■ · ·
   // · · ■
   // ■ · ·
-  private Board givenDefaultBoard() {
-    Board board = new Board(3, 3);
+  private SimpleBoard givenDefaultBoard() {
+    SimpleBoard board = new SimpleBoard(3, 3);
     board.born(new Cell(0, 0));
     board.born(new Cell(1, 2));
     board.born(new Cell(2, 0));

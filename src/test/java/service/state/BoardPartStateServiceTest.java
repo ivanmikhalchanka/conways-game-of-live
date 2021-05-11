@@ -1,22 +1,22 @@
-package service;
+package service.state;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import model.Board;
 import model.Cell;
+import model.SimpleBoard;
 import org.junit.jupiter.api.Test;
-import service.state.BoardStateService;
 
-class BoardStateServiceTest {
-
+class BoardPartStateServiceTest {
   @Test
   void testCalculateNextStateTriangle() {
     Board board = givenTriangleBoard();
+    BoardPartStateService stateService = givenStateServiceForWholeBoard(board);
 
-    Board result = new BoardStateService(board).calculateNextState();
+    Board result = stateService.moveToNextState(board);
 
     List<Cell> aliveCells = retrieveAliveCells(result);
     List<Cell> expectedAlive =
@@ -29,8 +29,9 @@ class BoardStateServiceTest {
   @Test
   void testCalculateNextStateToggle() {
     Board board = givenToggleBoard();
+    BoardPartStateService stateService = givenStateServiceForWholeBoard(board);
 
-    Board result = new BoardStateService(board).calculateNextState();
+    Board result = stateService.moveToNextState(board);
 
     List<Cell> aliveCells = retrieveAliveCells(result);
     List<Cell> expectedAlive = range(0, 3).mapToObj(col -> new Cell(1, col)).collect(toList());
@@ -40,10 +41,18 @@ class BoardStateServiceTest {
   @Test
   void testCalculateNextStateMiddleBoard() {
     Board board = givenMiddleBoard();
+    BoardPartStateService stateService = givenStateServiceForWholeBoard(board);
 
-    Board result = new BoardStateService(board).calculateNextState();
+    Board result = stateService.moveToNextState(board);
 
     assertEquals(List.of(new Cell(1, 1)), retrieveAliveCells(result));
+  }
+
+  BoardPartStateService givenStateServiceForWholeBoard(Board board) {
+    List<Cell> cells = Cell.buildCells(board.getNumOfRows(), board.getNumOfColumns())
+        .collect(toList());
+
+    return new BoardPartStateService(cells);
   }
 
   List<Cell> retrieveAliveCells(Board board) {
@@ -56,7 +65,7 @@ class BoardStateServiceTest {
   // · · ■
   // · · ·
   private Board givenTriangleBoard() {
-    Board board = new Board(3, 3);
+    Board board = new SimpleBoard(3, 3);
     board.born(new Cell(0, 1));
     board.born(new Cell(0, 2));
     board.born(new Cell(1, 2));
@@ -68,7 +77,7 @@ class BoardStateServiceTest {
   // · ■ ·
   // · ■ ·
   private Board givenToggleBoard() {
-    Board board = new Board(3, 3);
+    Board board = new SimpleBoard(3, 3);
     board.born(new Cell(0, 1));
     board.born(new Cell(1, 1));
     board.born(new Cell(2, 1));
@@ -80,7 +89,7 @@ class BoardStateServiceTest {
   // · · ■
   // ■ · ·
   private Board givenMiddleBoard() {
-    Board board = new Board(3, 3);
+    Board board = new SimpleBoard(3, 3);
     board.born(new Cell(0, 0));
     board.born(new Cell(1, 2));
     board.born(new Cell(2, 0));
