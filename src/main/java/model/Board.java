@@ -17,6 +17,13 @@ public class Board {
     cells = new boolean[numOfRows][numOfColumns];
   }
 
+  public Board(Board board) {
+    cells = new boolean[board.getNumOfRows()][board.getNumOfColumns()];
+    for (int row = 0; row < board.getNumOfRows(); row++) {
+      cells[row] = Arrays.copyOf(board.cells[row], board.cells[row].length);
+    }
+  }
+
   public int getNumOfRows() {
     return cells.length;
   }

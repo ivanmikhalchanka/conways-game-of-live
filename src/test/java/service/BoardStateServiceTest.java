@@ -8,6 +8,7 @@ import java.util.List;
 import model.Board;
 import model.Cell;
 import org.junit.jupiter.api.Test;
+import service.state.BoardStateService;
 
 class BoardStateServiceTest {
 
