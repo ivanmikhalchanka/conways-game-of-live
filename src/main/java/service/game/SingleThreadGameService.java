@@ -1,8 +1,8 @@
 package service.game;
 
-import model.Board;
 import model.CachingBoard;
 import renderer.BoardRenderer;
+import service.emulator.ComputationDelayEmulator;
 import service.state.BoardPartStateService;
 
 public class SingleThreadGameService implements GameService {
@@ -10,19 +10,20 @@ public class SingleThreadGameService implements GameService {
   private final BoardPartStateService boardPartStateService;
   private final CachingBoard board;
 
-  public SingleThreadGameService(Board board, BoardRenderer renderer) {
-    this.board = new CachingBoard(board);
+  public SingleThreadGameService(
+      CachingBoard board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
+    this.board = board;
     this.renderer = renderer;
-    this.boardPartStateService = new BoardPartStateService(this.board.getPartToProcess(1, 0));
+    this.boardPartStateService = new BoardPartStateService(this.board.getAllCells(), delayEmulator);
   }
 
   @Override
   public void start() {
     while (!board.hasConverged()) {
-      board.commitChanges();
-      renderer.render(board);
-
       boardPartStateService.moveToNextState(board);
+      board.commitChanges();
+
+      renderer.render(board);
     }
   }
 }

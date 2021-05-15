@@ -13,5 +13,9 @@ public interface Board {
 
   boolean isAlive(Cell cell);
 
+  List<Cell> getAllCells();
+
+  List<Cell> getPartOfCells(int total, int index);
+
   List<Cell> getNeighbours(Cell cell);
 }

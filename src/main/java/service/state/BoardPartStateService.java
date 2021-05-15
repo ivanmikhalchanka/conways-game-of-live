@@ -2,7 +2,7 @@ package service.state;
 
 import static java.util.stream.Collectors.partitioningBy;
 
-import common.ComputationDelayEmulator;
+import service.emulator.ComputationDelayEmulator;
 import java.util.List;
 import java.util.Map;
 import model.Board;
@@ -13,21 +13,21 @@ public class BoardPartStateService {
   public static final int STAY_ALIVE = 2;
 
   private final List<Cell> cellsToProcess;
+  private final ComputationDelayEmulator delayEmulator;
 
-  public BoardPartStateService(List<Cell> cellsToProcess) {
+  public BoardPartStateService(List<Cell> cellsToProcess, ComputationDelayEmulator delayEmulator) {
     this.cellsToProcess = cellsToProcess;
+    this.delayEmulator = delayEmulator;
   }
 
-  public Board moveToNextState(Board board) {
+  public void moveToNextState(Board board) {
     Map<Boolean, List<Cell>> cellsByAliveFlag =
         cellsToProcess.stream().collect(partitioningBy(cell -> shouldBeAlive(cell, board)));
 
     cellsByAliveFlag.get(true).forEach(board::born);
     cellsByAliveFlag.get(false).forEach(board::kill);
 
-    ComputationDelayEmulator.emulateComputationDelay(cellsToProcess.size());
-
-    return board;
+    delayEmulator.emulateComputationDelay(cellsToProcess.size());
   }
 
   boolean shouldBeAlive(Cell cell, Board board) {

@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class SimpleBoard implements Board {
+public class MutableBoard implements Board {
   private final boolean[][] cells;
 
-  public SimpleBoard(int numOfRows, int numOfColumns) {
+  public MutableBoard(int numOfRows, int numOfColumns) {
     cells = new boolean[numOfRows][numOfColumns];
   }
 
-  public SimpleBoard(Board board) {
+  public MutableBoard(Board board) {
     cells = new boolean[board.getNumOfRows()][board.getNumOfColumns()];
 
     Cell.buildCells(board.getNumOfRows(), board.getNumOfColumns())
@@ -62,6 +62,24 @@ public class SimpleBoard implements Board {
   }
 
   @Override
+  public List<Cell> getAllCells() {
+    return getPartOfCells(1, 0);
+  }
+
+  @Override
+  public List<Cell> getPartOfCells(int total, int index) {
+    int totalCells = getNumOfRows() * getNumOfColumns();
+    int cellsPerPartition = totalCells / total;
+
+    Stream<Cell> cellsTail =
+        Cell.buildCells(getNumOfRows(), getNumOfColumns()).skip((long) index * cellsPerPartition);
+
+    return total > index + 1
+        ? cellsTail.limit(cellsPerPartition).collect(toList())
+        : cellsTail.collect(toList());
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -69,7 +87,7 @@ public class SimpleBoard implements Board {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SimpleBoard board = (SimpleBoard) o;
+    MutableBoard board = (MutableBoard) o;
     return Arrays.deepEquals(cells, board.cells);
   }
 
