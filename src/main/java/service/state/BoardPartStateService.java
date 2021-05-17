@@ -1,7 +1,12 @@
 package service.state;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.partitioningBy;
+import static java.util.stream.Collectors.toList;
 
+import java.util.stream.Stream;
+import model.ActivatedCell;
 import service.emulator.ComputationDelayEmulator;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +27,18 @@ public class BoardPartStateService {
 
   public void moveToNextState(Board board) {
     Map<Boolean, List<Cell>> cellsByAliveFlag =
-        cellsToProcess.stream().collect(partitioningBy(cell -> shouldBeAlive(cell, board)));
+        calculateNextState(board)
+            .collect(
+                partitioningBy(ActivatedCell::isActive, mapping(ActivatedCell::getCell, toList())));
 
     cellsByAliveFlag.get(true).forEach(board::born);
     cellsByAliveFlag.get(false).forEach(board::kill);
+  }
 
+  public Stream<ActivatedCell> calculateNextState(Board board) {
     delayEmulator.emulateComputationDelay(cellsToProcess.size());
+
+    return cellsToProcess.stream().map(cell -> new ActivatedCell(cell, shouldBeAlive(cell, board)));
   }
 
   boolean shouldBeAlive(Cell cell, Board board) {

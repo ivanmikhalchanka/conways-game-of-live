@@ -1,11 +1,11 @@
-import model.CachingBoard;
-import service.emulator.ComputationDelayEmulator;
-import service.emulator.ThreadSleepComputationDelayEmulator;
 import factory.GliderBoardFactory;
+import model.CachingBoard;
 import renderer.BoardRenderer;
 import renderer.ConsoleBoardRenderer;
+import service.emulator.ComputationDelayEmulator;
+import service.emulator.ThreadSleepComputationDelayEmulator;
+import service.game.FutureGameService;
 import service.game.GameService;
-import service.game.ThreadPoolGameService;
 
 public class GameOfLive {
   public static void main(String[] args) {
@@ -15,7 +15,7 @@ public class GameOfLive {
     BoardRenderer renderer = new ConsoleBoardRenderer();
     ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator();
 
-    GameService gameService = new ThreadPoolGameService(cachingBoard, renderer, delayEmulator);
+    GameService gameService = new FutureGameService(cachingBoard, renderer, delayEmulator);
     gameService.start();
   }
 }

@@ -13,13 +13,13 @@ import model.CachingBoard;
 import renderer.BoardRenderer;
 import service.state.BoardPartStateService;
 
-public class ThreadPoolGameService implements GameService {
+public class CyclicBarrierGameService implements GameService {
   private final CachingBoard board;
   private final CyclicBarrier barrier;
   private final BoardRenderer renderer;
   private final List<Worker> workers;
 
-  public ThreadPoolGameService(
+  public CyclicBarrierGameService(
       CachingBoard board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
     this.board = board;
     this.renderer = renderer;
