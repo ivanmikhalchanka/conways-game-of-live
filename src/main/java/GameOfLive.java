@@ -1,10 +1,11 @@
-import factory.GliderBoardFactory;
+import factory.board.GliderBoardFactory;
+import factory.game.FixedThreadPoolFutureGameServiceFactory;
+import factory.game.ForkJoinPoolFutureGameServiceFactory;
 import model.CachingBoard;
 import renderer.BoardRenderer;
 import renderer.ConsoleBoardRenderer;
 import service.emulator.ComputationDelayEmulator;
 import service.emulator.ThreadSleepComputationDelayEmulator;
-import service.game.FutureGameService;
 import service.game.GameService;
 
 public class GameOfLive {
@@ -15,7 +16,8 @@ public class GameOfLive {
     BoardRenderer renderer = new ConsoleBoardRenderer();
     ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator();
 
-    GameService gameService = new FutureGameService(cachingBoard, renderer, delayEmulator);
+    GameService gameService =
+        new ForkJoinPoolFutureGameServiceFactory(cachingBoard, renderer, delayEmulator).build();
     gameService.start();
   }
 }
