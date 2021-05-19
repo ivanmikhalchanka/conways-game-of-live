@@ -3,6 +3,7 @@ package service.game;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+import common.ThreadUtils;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -28,11 +29,11 @@ public class FutureGameService implements GameService {
     this.board = board;
     this.renderer = renderer;
 
-    int availableProcessors = Runtime.getRuntime().availableProcessors();
+    int availableThreads = ThreadUtils.getNumberOfAvailableThreads();
 
     partStateServices =
-        range(0, availableProcessors)
-            .mapToObj(index -> this.board.getPartOfCells(availableProcessors, index))
+        range(0, availableThreads)
+            .mapToObj(index -> this.board.getPartOfCells(availableThreads, index))
             .map(cells -> new BoardPartStateService(cells, delayEmulator))
             .collect(toList());
   }

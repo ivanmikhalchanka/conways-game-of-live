@@ -3,6 +3,7 @@ package service.game;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+import common.ThreadUtils;
 import service.emulator.ComputationDelayEmulator;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -24,12 +25,12 @@ public class CyclicBarrierGameService implements GameService {
     this.board = board;
     this.renderer = renderer;
 
-    int availableProcessors = Runtime.getRuntime().availableProcessors();
-    barrier = new CyclicBarrier(availableProcessors, this::processIterationComplete);
+    int availableThreads = ThreadUtils.getNumberOfAvailableThreads();
+    barrier = new CyclicBarrier(availableThreads, this::processIterationComplete);
 
     workers =
-        range(0, availableProcessors)
-            .mapToObj(index -> this.board.getPartOfCells(availableProcessors, index))
+        range(0, availableThreads)
+            .mapToObj(index -> this.board.getPartOfCells(availableThreads, index))
             .map(cells -> new BoardPartStateService(cells, delayEmulator))
             .map(Worker::new)
             .collect(toList());
