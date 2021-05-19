@@ -1,23 +1,19 @@
 package service.game;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import model.ActivatedCell;
 import model.CachingBoard;
-import model.Cell;
 import renderer.BoardRenderer;
 import service.emulator.ComputationDelayEmulator;
 import service.state.BoardPartStateService;
@@ -57,19 +53,14 @@ public class FutureGameService implements GameService {
 
       moveToNextState(completionService);
     }
+
+    threadPool.shutdown();  // IMPORTANT! Without this invocation ThreadPool will never finish.
   }
 
   private void moveToNextState(ExecutorCompletionService<Stream<ActivatedCell>> completionService) {
-    int completed = 0;
-    while (completed++ < partStateServices.size()) {
-      Map<Boolean, List<Cell>> cellsByActiveFlag =
-          retrieveNext(completionService)
-              .collect(
-                  groupingBy(ActivatedCell::isActive, mapping(ActivatedCell::getCell, toList())));
-
-      cellsByActiveFlag.getOrDefault(true, emptyList()).forEach(board::born);
-      cellsByActiveFlag.getOrDefault(false, emptyList()).forEach(board::kill);
-    }
+    IntStream.range(0, partStateServices.size())
+        .mapToObj(i -> retrieveNext(completionService))
+        .forEach(changes -> BoardPartStateService.applyChanges(changes, board));
   }
 
   Stream<ActivatedCell> retrieveNext(

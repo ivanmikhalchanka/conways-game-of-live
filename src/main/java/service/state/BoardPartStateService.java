@@ -1,5 +1,6 @@
 package service.state;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.partitioningBy;
@@ -20,19 +21,24 @@ public class BoardPartStateService {
   private final List<Cell> cellsToProcess;
   private final ComputationDelayEmulator delayEmulator;
 
+  public static void applyChanges(Stream<ActivatedCell> changes, Board board) {
+    Map<Boolean, List<Cell>> cellsByActiveFlag =
+        changes.collect(
+            partitioningBy(ActivatedCell::isActive, mapping(ActivatedCell::getCell, toList())));
+
+    cellsByActiveFlag.getOrDefault(true, emptyList()).forEach(board::born);
+    cellsByActiveFlag.getOrDefault(false, emptyList()).forEach(board::kill);
+  }
+
   public BoardPartStateService(List<Cell> cellsToProcess, ComputationDelayEmulator delayEmulator) {
     this.cellsToProcess = cellsToProcess;
     this.delayEmulator = delayEmulator;
   }
 
   public void moveToNextState(Board board) {
-    Map<Boolean, List<Cell>> cellsByAliveFlag =
-        calculateNextState(board)
-            .collect(
-                partitioningBy(ActivatedCell::isActive, mapping(ActivatedCell::getCell, toList())));
+    Stream<ActivatedCell> changes = calculateNextState(board);
 
-    cellsByAliveFlag.get(true).forEach(board::born);
-    cellsByAliveFlag.get(false).forEach(board::kill);
+    applyChanges(changes, board);
   }
 
   public Stream<ActivatedCell> calculateNextState(Board board) {
