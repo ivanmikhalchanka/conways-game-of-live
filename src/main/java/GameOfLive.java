@@ -1,5 +1,4 @@
 import factory.board.GliderBoardFactory;
-import factory.game.FixedThreadPoolFutureGameServiceFactory;
 import factory.game.ForkJoinPoolFutureGameServiceFactory;
 import model.CachingBoard;
 import renderer.BoardRenderer;

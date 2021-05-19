@@ -4,14 +4,12 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
 import common.ThreadUtils;
-import service.emulator.ComputationDelayEmulator;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import model.CachingBoard;
 import renderer.BoardRenderer;
+import service.emulator.ComputationDelayEmulator;
 import service.state.BoardPartStateService;
 
 public class CyclicBarrierGameService implements GameService {
@@ -45,10 +43,9 @@ public class CyclicBarrierGameService implements GameService {
   public void start() {
     renderer.render(board);
 
-    ExecutorService pool = Executors.newFixedThreadPool(workers.size());
-    workers.forEach(pool::submit);
-
-    pool.shutdown();
+    workers.stream()
+        .map(Thread::new)
+        .forEach(Thread::start);
   }
 
   class Worker implements Runnable {
