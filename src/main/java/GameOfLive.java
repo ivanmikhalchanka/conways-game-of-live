@@ -13,7 +13,7 @@ public class GameOfLive {
     var cachingBoard = new CachingBoard(board);
 
     BoardRenderer renderer = new ConsoleBoardRenderer();
-    ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator();
+    ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator(5L);
 
     GameService gameService =
         new ForkJoinPoolFutureGameServiceFactory(cachingBoard, renderer, delayEmulator).build();

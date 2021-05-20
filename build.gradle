@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.31'
+
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
@@ -17,6 +19,7 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.7.0'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.10.0'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.10.0'
+    testImplementation group: 'org.openjdk.jmh', name: 'jmh-generator-annprocess', version: '1.31'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 

@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import model.ActivatedCell;
@@ -53,16 +54,18 @@ public class FutureGameService implements GameService {
           .map(service -> (Callable<Stream<ActivatedCell>>) () -> service.calculateNextState(board))
           .forEach(completionService::submit);
 
-      moveToNextState(completionService);
+      Stream<ActivatedCell> results = waitForResults(completionService);
+      BoardPartStateService.applyChanges(results, board);
     }
 
     executorService.shutdown(); // IMPORTANT! Without this invocation ThreadPool will never finish.
   }
 
-  private void moveToNextState(ExecutorCompletionService<Stream<ActivatedCell>> completionService) {
-    IntStream.range(0, partStateServices.size())
+  private Stream<ActivatedCell> waitForResults(
+      ExecutorCompletionService<Stream<ActivatedCell>> completionService) {
+    return IntStream.range(0, partStateServices.size())
         .mapToObj(i -> retrieveNext(completionService))
-        .forEach(changes -> BoardPartStateService.applyChanges(changes, board));
+        .flatMap(Function.identity());
   }
 
   Stream<ActivatedCell> retrieveNext(
