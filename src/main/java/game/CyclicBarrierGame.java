@@ -1,24 +1,25 @@
-package service.game;
+package game;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
 import common.ThreadUtils;
+import game.Game;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import model.CachingBoard;
 import renderer.BoardRenderer;
-import service.emulator.ComputationDelayEmulator;
-import service.state.BoardPartStateService;
+import emulator.ComputationDelayEmulator;
+import game.state.BoardPartStateService;
 
-public class CyclicBarrierGameService implements GameService {
+public class CyclicBarrierGame implements Game {
   private final CachingBoard board;
   private final CyclicBarrier barrier;
   private final BoardRenderer renderer;
   private final List<Worker> workers;
 
-  public CyclicBarrierGameService(
+  public CyclicBarrierGame(
       CachingBoard board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
     this.board = board;
     this.renderer = renderer;

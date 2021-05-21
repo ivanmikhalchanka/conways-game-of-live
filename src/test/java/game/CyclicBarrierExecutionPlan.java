@@ -1,8 +1,8 @@
-package service.game;
+package game;
 
-import static service.game.BenchmarkStateUtils.givenBoardWithGlider;
-import static service.game.BenchmarkStateUtils.givenDefaultBoardRenderer;
-import static service.game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
+import static game.BenchmarkStateUtils.givenBoardWithGlider;
+import static game.BenchmarkStateUtils.givenDefaultBoardRenderer;
+import static game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
 
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Scope;
@@ -12,12 +12,12 @@ import org.openjdk.jmh.annotations.TearDown;
 
 @State(Scope.Benchmark)
 public class CyclicBarrierExecutionPlan {
-  public GameService gameService;
+  public Game game;
 
   @Setup(Level.Invocation)
   public void setupGameService() {
-    gameService =
-        new CyclicBarrierGameService(
+    game =
+        new CyclicBarrierGame(
             givenBoardWithGlider(),
             givenDefaultBoardRenderer(),
             givenDefaultComputationDelayEmulator());

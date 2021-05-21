@@ -1,10 +1,7 @@
 package factory.game;
 
-import model.CachingBoard;
-import renderer.BoardRenderer;
-import service.emulator.ComputationDelayEmulator;
-import service.game.FutureGameService;
+import game.FutureGame;
 
 public interface FutureGameServiceFactory {
-  FutureGameService build();
+  FutureGame build();
 }

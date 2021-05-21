@@ -1,14 +1,12 @@
-package service.state;
+package game.state;
 
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toList;
 
 import java.util.stream.Stream;
-import model.ActivatedCell;
-import service.emulator.ComputationDelayEmulator;
+import emulator.ComputationDelayEmulator;
 import java.util.List;
 import java.util.Map;
 import model.Board;

@@ -1,4 +1,4 @@
-package service.emulator;
+package emulator;
 
 public class ThreadSleepComputationDelayEmulator implements ComputationDelayEmulator {
   private final Long delayMultiplier;

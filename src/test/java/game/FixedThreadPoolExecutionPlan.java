@@ -1,8 +1,8 @@
-package service.game;
+package game;
 
-import static service.game.BenchmarkStateUtils.givenBoardWithGlider;
-import static service.game.BenchmarkStateUtils.givenDefaultBoardRenderer;
-import static service.game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
+import static game.BenchmarkStateUtils.givenBoardWithGlider;
+import static game.BenchmarkStateUtils.givenDefaultBoardRenderer;
+import static game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,7 +14,7 @@ import org.openjdk.jmh.annotations.TearDown;
 
 @State(Scope.Benchmark)
 public class FixedThreadPoolExecutionPlan {
-  public GameService gameService;
+  public Game game;
 
   @Setup(Level.Invocation)
   public void setupGameService() {
@@ -23,8 +23,8 @@ public class FixedThreadPoolExecutionPlan {
 
     ExecutorService threadPool = Executors.newFixedThreadPool(availableThreads);
 
-    gameService =
-        new FutureGameService(
+    game =
+        new FutureGame(
             givenBoardWithGlider(),
             givenDefaultBoardRenderer(),
             givenDefaultComputationDelayEmulator(),

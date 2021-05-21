@@ -1,8 +1,8 @@
-package service.game;
+package game;
 
-import static service.game.BenchmarkStateUtils.givenBoardWithGlider;
-import static service.game.BenchmarkStateUtils.givenDefaultBoardRenderer;
-import static service.game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
+import static game.BenchmarkStateUtils.givenBoardWithGlider;
+import static game.BenchmarkStateUtils.givenDefaultBoardRenderer;
+import static game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
 
 import java.util.concurrent.ForkJoinPool;
 import org.openjdk.jmh.annotations.Level;
@@ -13,14 +13,14 @@ import org.openjdk.jmh.annotations.TearDown;
 
 @State(Scope.Benchmark)
 public class ForkJoinExecutionPlan {
-  public GameService gameService;
+  public Game game;
 
   @Setup(Level.Invocation)
   public void setupGameService() {
     ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
 
-    gameService =
-        new FutureGameService(
+    game =
+        new FutureGame(
             givenBoardWithGlider(),
             givenDefaultBoardRenderer(),
             givenDefaultComputationDelayEmulator(),

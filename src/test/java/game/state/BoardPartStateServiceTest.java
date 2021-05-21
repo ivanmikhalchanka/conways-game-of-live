@@ -1,16 +1,13 @@
-package service.state;
+package game.state;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.*;
 
-import model.ActivatedCell;
 import model.Cell;
-import service.emulator.ComputationDelayEmulator;
+import emulator.ComputationDelayEmulator;
 import java.util.List;
 import model.Board;
-import model.Cell;
-import model.MutableBoard;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

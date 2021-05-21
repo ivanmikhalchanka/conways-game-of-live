@@ -2,6 +2,7 @@ package model;
 
 import static java.util.stream.Collectors.toSet;
 
+import game.state.MutableBoard;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.experimental.Delegate;

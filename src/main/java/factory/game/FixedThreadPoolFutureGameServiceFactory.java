@@ -6,8 +6,8 @@ import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import model.CachingBoard;
 import renderer.BoardRenderer;
-import service.emulator.ComputationDelayEmulator;
-import service.game.FutureGameService;
+import emulator.ComputationDelayEmulator;
+import game.FutureGame;
 
 @RequiredArgsConstructor
 public class FixedThreadPoolFutureGameServiceFactory implements FutureGameServiceFactory {
@@ -16,10 +16,10 @@ public class FixedThreadPoolFutureGameServiceFactory implements FutureGameServic
   private final ComputationDelayEmulator delayEmulator;
 
   @Override
-  public FutureGameService build() {
+  public FutureGame build() {
     int availableThreads = ThreadUtils.getNumberOfAvailableThreads();
     ExecutorService executorService = Executors.newFixedThreadPool(availableThreads);
 
-    return new FutureGameService(board, renderer, delayEmulator, executorService, availableThreads);
+    return new FutureGame(board, renderer, delayEmulator, executorService, availableThreads);
   }
 }

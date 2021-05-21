@@ -1,8 +1,9 @@
-package service.game;
+package game;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+import game.Game;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -12,19 +13,19 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import model.ActivatedCell;
+import game.state.ActivatedCell;
 import model.CachingBoard;
 import renderer.BoardRenderer;
-import service.emulator.ComputationDelayEmulator;
-import service.state.BoardPartStateService;
+import emulator.ComputationDelayEmulator;
+import game.state.BoardPartStateService;
 
-public class FutureGameService implements GameService {
+public class FutureGame implements Game {
   private final CachingBoard board;
   private final BoardRenderer renderer;
   private final List<BoardPartStateService> partStateServices;
   private final ExecutorService executorService;
 
-  public FutureGameService(
+  public FutureGame(
       CachingBoard board,
       BoardRenderer renderer,
       ComputationDelayEmulator delayEmulator,

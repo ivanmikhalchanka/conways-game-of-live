@@ -1,4 +1,4 @@
-package service.game;
+package game;
 
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -15,21 +15,21 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 public class GameServiceBenchmark {
   @Benchmark
   public void singleThreadBenchmark(SingleThreadExecutionPlan executionPlan) {
-    executionPlan.gameService.start();
+    executionPlan.game.start();
   }
 
   @Benchmark
   public void cyclicBarrierBenchmark(CyclicBarrierExecutionPlan executionPlan) {
-    executionPlan.gameService.start();
+    executionPlan.game.start();
   }
 
   @Benchmark
   public void forkJoinBenchmark(ForkJoinExecutionPlan executionPlan) {
-    executionPlan.gameService.start();
+    executionPlan.game.start();
   }
 
   @Benchmark
   public void fixedThreadPoolBenchmark(FixedThreadPoolExecutionPlan executionPlan) {
-    executionPlan.gameService.start();
+    executionPlan.game.start();
   }
 }

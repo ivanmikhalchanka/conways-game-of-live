@@ -1,7 +1,7 @@
 package factory.board;
 
 import model.Board;
-import model.MutableBoard;
+import game.state.MutableBoard;
 import model.Cell;
 
 public class ToggleBoardFactory implements BoardFactory {

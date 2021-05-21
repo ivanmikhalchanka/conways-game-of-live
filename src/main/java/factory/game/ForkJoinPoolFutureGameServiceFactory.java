@@ -4,8 +4,8 @@ import java.util.concurrent.ForkJoinPool;
 import lombok.RequiredArgsConstructor;
 import model.CachingBoard;
 import renderer.BoardRenderer;
-import service.emulator.ComputationDelayEmulator;
-import service.game.FutureGameService;
+import emulator.ComputationDelayEmulator;
+import game.FutureGame;
 
 @RequiredArgsConstructor
 public class ForkJoinPoolFutureGameServiceFactory implements FutureGameServiceFactory {
@@ -14,10 +14,10 @@ public class ForkJoinPoolFutureGameServiceFactory implements FutureGameServiceFa
   private final ComputationDelayEmulator delayEmulator;
 
   @Override
-  public FutureGameService build() {
+  public FutureGame build() {
     ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
 
-    return new FutureGameService(
+    return new FutureGame(
         board, renderer, delayEmulator, forkJoinPool, forkJoinPool.getParallelism());
   }
 }

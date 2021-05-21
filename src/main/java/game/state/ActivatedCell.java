@@ -1,6 +1,7 @@
-package model;
+package game.state;
 
 import java.util.Objects;
+import model.Cell;
 
 public class ActivatedCell {
   private final Cell cell;

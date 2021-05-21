@@ -1,4 +1,4 @@
-package model;
+package game.state;
 
 import static common.IntPredicates.isPositive;
 import static common.IntPredicates.lessThan;
@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import model.Board;
+import model.Cell;
 
 public class MutableBoard implements Board {
   private final boolean[][] cells;

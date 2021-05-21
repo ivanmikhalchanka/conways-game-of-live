@@ -1,11 +1,11 @@
-package service.game;
+package game;
 
+import game.state.MutableBoard;
 import model.CachingBoard;
 import model.Cell;
-import model.MutableBoard;
 import renderer.BoardRenderer;
-import service.emulator.ComputationDelayEmulator;
-import service.emulator.ThreadSleepComputationDelayEmulator;
+import emulator.ComputationDelayEmulator;
+import emulator.ThreadSleepComputationDelayEmulator;
 
 public class BenchmarkStateUtils {
   public static BoardRenderer givenDefaultBoardRenderer() {
