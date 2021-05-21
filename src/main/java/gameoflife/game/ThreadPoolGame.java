@@ -3,6 +3,7 @@ package gameoflife.game;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+import gameoflife.common.ThreadUtils;
 import gameoflife.emulator.ComputationDelayEmulator;
 import gameoflife.game.state.ActivatedCell;
 import gameoflife.game.state.BoardPartStateService;
@@ -11,6 +12,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -19,25 +21,25 @@ import gameoflife.model.Board;
 import gameoflife.game.state.CachingBoard;
 import gameoflife.renderer.BoardRenderer;
 
-public class FutureGame implements Game {
+public class ThreadPoolGame implements Game {
   private final CachingBoard board;
   private final BoardRenderer renderer;
   private final List<BoardPartStateService> partStateServices;
   private final ExecutorService executorService;
 
-  public FutureGame(
+  public ThreadPoolGame(
       Board board,
       BoardRenderer renderer,
-      ComputationDelayEmulator delayEmulator,
-      ExecutorService executorService,
-      int parallelism) {
+      ComputationDelayEmulator delayEmulator) {
     this.board = new CachingBoard(board);
     this.renderer = renderer;
-    this.executorService = executorService;
+
+    int availableThreads = ThreadUtils.getNumberOfAvailableThreads();
+    this.executorService = Executors.newFixedThreadPool(availableThreads);
 
     partStateServices =
-        range(0, parallelism)
-            .mapToObj(index -> this.board.getPartOfCells(parallelism, index))
+        range(0, availableThreads)
+            .mapToObj(index -> this.board.getPartOfCells(availableThreads, index))
             .map(cells -> new BoardPartStateService(cells, delayEmulator))
             .collect(toList());
   }

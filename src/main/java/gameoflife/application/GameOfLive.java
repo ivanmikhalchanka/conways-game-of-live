@@ -1,7 +1,7 @@
 package gameoflife.application;
 
 import gameoflife.factory.board.GliderBoardFactory;
-import gameoflife.factory.game.ForkJoinPoolFutureGameServiceFactory;
+import gameoflife.game.ThreadPoolGame;
 import gameoflife.renderer.BoardRenderer;
 import gameoflife.renderer.PrintStreamBoardRenderer;
 import gameoflife.emulator.ComputationDelayEmulator;
@@ -15,7 +15,7 @@ public class GameOfLive {
     BoardRenderer renderer = new PrintStreamBoardRenderer(System.out);
     ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator(5L);
 
-    Game game = new ForkJoinPoolFutureGameServiceFactory(board, renderer, delayEmulator).build();
+    Game game = new ThreadPoolGame(board, renderer, delayEmulator);
     game.start();
   }
 }

@@ -24,12 +24,7 @@ public class GameServiceBenchmark {
   }
 
   @Benchmark
-  public void forkJoinBenchmark(ForkJoinExecutionPlan executionPlan) {
-    executionPlan.game.start();
-  }
-
-  @Benchmark
-  public void fixedThreadPoolBenchmark(FixedThreadPoolExecutionPlan executionPlan) {
+  public void threadPoolBenchmark(ThreadPoolExecutionPlan executionPlan) {
     executionPlan.game.start();
   }
 }
