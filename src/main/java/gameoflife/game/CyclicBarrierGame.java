@@ -1,7 +1,6 @@
 package gameoflife.game;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.IntStream.range;
 
 import gameoflife.common.ThreadUtils;
 import gameoflife.emulator.ComputationDelayEmulator;
@@ -24,9 +23,7 @@ public class CyclicBarrierGame extends CachingBoardGame {
     barrier = new CyclicBarrier(availableThreads, this::processIterationComplete);
 
     workers =
-        range(0, availableThreads)
-            .mapToObj(index -> this.board.getPartOfCells(availableThreads, index))
-            .map(cells -> new BoardPartStateService(cells, delayEmulator))
+        super.buildBoardPartStateServices(availableThreads).stream()
             .map(Worker::new)
             .collect(toList());
   }

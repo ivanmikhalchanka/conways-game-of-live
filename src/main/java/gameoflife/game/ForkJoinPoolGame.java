@@ -27,16 +27,14 @@ public class ForkJoinPoolGame extends CachingBoardGame {
     int boardSize = board.getNumOfColumns() * board.getNumOfRows();
     int threshold = boardSize / forkJoinPool.getParallelism();
 
-    while (!board.hasConverged()) {
-      renderer.render(board);
-      board.commitChanges();
+    super.applyChangesUtilConverged(() -> calculateChanges(threshold));
+  }
 
-      ForkJoinBoardStateCalculator boardStateCalculator =
-          new ForkJoinBoardStateCalculator(board.getAllCells(), threshold);
-      Stream<ActivatedCell> changes = forkJoinPool.invoke(boardStateCalculator);
+  Stream<ActivatedCell> calculateChanges(int threshold) {
+    ForkJoinBoardStateCalculator boardStateCalculator =
+        new ForkJoinBoardStateCalculator(board.getAllCells(), threshold);
 
-      BoardPartStateService.applyChanges(changes, board);
-    }
+    return forkJoinPool.invoke(boardStateCalculator);
   }
 
   /* With accordance to JMH results -
