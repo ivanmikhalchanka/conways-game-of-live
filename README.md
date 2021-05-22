@@ -24,13 +24,15 @@ on [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 ##### Without delay
 | Benchmark       | Mode | Cnt | Score   | Error | Units |
 |-----------------|------|-----|---------|-------|------ |
+| SingleThread    | avgt |   5 | 3.830 ± | 0.049 | ms/op |
 | CyclicBarrier   | avgt |   5 | 2.202 ± | 0.686 | ms/op |
 | ThreadPool      | avgt |   5 | 6.073 ± | 4.685 | ms/op |
-| SingleThread    | avgt |   5 | 3.830 ± | 0.049 | ms/op |
+| ForkJoinPool    | avgt |   5 | 5.755 ± | 0.019 | ms/op |
 
 ##### With number of cells to process by task delay
 | Benchmark       | Mode | Cnt | Score      | Error   | Units |
 |-----------------|------|-----|------------|---------|-------|
+| SingleThread    | avgt |   5 | 3370.461 ± | 204.707 | ms/op |
 | CyclicBarrier   | avgt |   5 |    6.751 ± |   0.316 | ms/op |
 | ThreadPool      | avgt |   5 |  392.589 ± |   4.785 | ms/op |
-| SingleThread    | avgt |   5 | 3370.461 ± | 204.707 | ms/op |
+| ForkJoinPool    | avgt |   5 |  362.661 ± |  19.011 | ms/op |

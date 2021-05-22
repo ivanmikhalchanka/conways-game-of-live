@@ -1,21 +1,21 @@
-package gameoflife.application;
+package gameoflife;
 
-import gameoflife.factory.board.GliderBoardFactory;
-import gameoflife.game.ThreadPoolGame;
-import gameoflife.renderer.BoardRenderer;
-import gameoflife.renderer.PrintStreamBoardRenderer;
 import gameoflife.emulator.ComputationDelayEmulator;
 import gameoflife.emulator.ThreadSleepComputationDelayEmulator;
+import gameoflife.factory.board.GliderBoardFactory;
+import gameoflife.game.ForkJoinPoolGame;
 import gameoflife.game.Game;
+import gameoflife.renderer.BoardRenderer;
+import gameoflife.renderer.PrintStreamBoardRenderer;
 
-public class GameOfLive {
+public class Application {
   public static void main(String[] args) {
     var board = new GliderBoardFactory().build(10, 10);
 
     BoardRenderer renderer = new PrintStreamBoardRenderer(System.out);
     ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator(5L);
 
-    Game game = new ThreadPoolGame(board, renderer, delayEmulator);
+    Game game = new ForkJoinPoolGame(board, renderer, delayEmulator);
     game.start();
   }
 }
