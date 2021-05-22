@@ -6,23 +6,19 @@ import static java.util.stream.IntStream.range;
 import gameoflife.common.ThreadUtils;
 import gameoflife.emulator.ComputationDelayEmulator;
 import gameoflife.game.state.BoardPartStateService;
+import gameoflife.model.Board;
+import gameoflife.renderer.BoardRenderer;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-import gameoflife.model.Board;
-import gameoflife.game.state.CachingBoard;
-import gameoflife.renderer.BoardRenderer;
 
-public class CyclicBarrierGame implements Game {
-  private final CachingBoard board;
+public class CyclicBarrierGame extends CachingBoardGame {
   private final CyclicBarrier barrier;
-  private final BoardRenderer renderer;
   private final List<Worker> workers;
 
   public CyclicBarrierGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
-    this.board = new CachingBoard(board);
-    this.renderer = renderer;
+    super(board, renderer, delayEmulator);
 
     int availableThreads = ThreadUtils.getNumberOfAvailableThreads();
     barrier = new CyclicBarrier(availableThreads, this::processIterationComplete);
@@ -44,9 +40,7 @@ public class CyclicBarrierGame implements Game {
   public void start() {
     renderer.render(board);
 
-    workers.stream()
-        .map(Thread::new)
-        .forEach(Thread::start);
+    workers.stream().map(Thread::new).forEach(Thread::start);
   }
 
   class Worker implements Runnable {

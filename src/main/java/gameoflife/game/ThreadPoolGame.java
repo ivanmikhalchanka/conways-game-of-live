@@ -21,9 +21,7 @@ import gameoflife.model.Board;
 import gameoflife.game.state.CachingBoard;
 import gameoflife.renderer.BoardRenderer;
 
-public class ThreadPoolGame implements Game {
-  private final CachingBoard board;
-  private final BoardRenderer renderer;
+public class ThreadPoolGame extends CachingBoardGame {
   private final List<BoardPartStateService> partStateServices;
   private final ExecutorService executorService;
 
@@ -31,8 +29,7 @@ public class ThreadPoolGame implements Game {
       Board board,
       BoardRenderer renderer,
       ComputationDelayEmulator delayEmulator) {
-    this.board = new CachingBoard(board);
-    this.renderer = renderer;
+    super(board, renderer, delayEmulator);
 
     int availableThreads = ThreadUtils.getNumberOfAvailableThreads();
     this.executorService = Executors.newFixedThreadPool(availableThreads);

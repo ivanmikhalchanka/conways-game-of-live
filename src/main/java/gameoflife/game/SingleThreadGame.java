@@ -6,15 +6,13 @@ import gameoflife.model.Board;
 import gameoflife.game.state.CachingBoard;
 import gameoflife.renderer.BoardRenderer;
 
-public class SingleThreadGame implements Game {
-  private final BoardRenderer renderer;
+public class SingleThreadGame extends CachingBoardGame {
   private final BoardPartStateService boardPartStateService;
-  private final CachingBoard board;
 
   public SingleThreadGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
-    this.board = new CachingBoard(board);
-    this.renderer = renderer;
+    super(board, renderer, delayEmulator);
+
     this.boardPartStateService = new BoardPartStateService(this.board.getAllCells(), delayEmulator);
   }
 

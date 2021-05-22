@@ -3,7 +3,6 @@ package gameoflife.game;
 import gameoflife.emulator.ComputationDelayEmulator;
 import gameoflife.game.state.ActivatedCell;
 import gameoflife.game.state.BoardPartStateService;
-import gameoflife.game.state.CachingBoard;
 import gameoflife.model.Board;
 import gameoflife.model.Cell;
 import gameoflife.renderer.BoardRenderer;
@@ -13,17 +12,12 @@ import java.util.concurrent.RecursiveTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ForkJoinPoolGame implements Game {
-  private final CachingBoard board;
-  private final BoardRenderer renderer;
-  private final ComputationDelayEmulator delayEmulator;
+public class ForkJoinPoolGame extends CachingBoardGame {
   private final ForkJoinPool forkJoinPool;
 
   public ForkJoinPoolGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
-    this.board = new CachingBoard(board);
-    this.renderer = renderer;
-    this.delayEmulator = delayEmulator;
+    super(board, renderer, delayEmulator);
 
     forkJoinPool = ForkJoinPool.commonPool();
   }
