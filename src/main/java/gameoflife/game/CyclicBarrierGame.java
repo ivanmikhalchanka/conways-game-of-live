@@ -15,7 +15,12 @@ public class CyclicBarrierGame extends CachingBoardGame {
   private final CyclicBarrier barrier;
   private final List<Worker> workers;
 
-  public CyclicBarrierGame(
+  public static void start(
+      Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
+    new CyclicBarrierGame(board, renderer, delayEmulator).start();
+  }
+
+  private CyclicBarrierGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
     super(board, renderer, delayEmulator);
 

@@ -8,7 +8,12 @@ import gameoflife.renderer.BoardRenderer;
 public class SingleThreadGame extends CachingBoardGame {
   private final BoardPartStateService boardPartStateService;
 
-  public SingleThreadGame(
+  public static void start(
+      Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
+    new SingleThreadGame(board, renderer, delayEmulator).start();
+  }
+
+  private SingleThreadGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
     super(board, renderer, delayEmulator);
 

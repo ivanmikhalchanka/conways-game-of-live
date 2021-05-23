@@ -14,19 +14,25 @@ import java.util.stream.Stream;
 
 public class ForkJoinPoolGame extends CachingBoardGame {
   private final ForkJoinPool forkJoinPool;
+  private final int threshold;
 
-  public ForkJoinPoolGame(
+  public static void start(
+      Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
+    new ForkJoinPoolGame(board, renderer, delayEmulator).start();
+  }
+
+  private ForkJoinPoolGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
     super(board, renderer, delayEmulator);
 
     forkJoinPool = ForkJoinPool.commonPool();
+
+    int boardSize = board.getNumOfColumns() * board.getNumOfRows();
+    threshold = boardSize / forkJoinPool.getParallelism();
   }
 
   @Override
   public void start() {
-    int boardSize = board.getNumOfColumns() * board.getNumOfRows();
-    int threshold = boardSize / forkJoinPool.getParallelism();
-
     super.applyChangesUtilConverged(() -> calculateChanges(threshold));
   }
 

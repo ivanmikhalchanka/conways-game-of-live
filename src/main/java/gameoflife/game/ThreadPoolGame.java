@@ -21,7 +21,12 @@ public class ThreadPoolGame extends CachingBoardGame {
   private final List<BoardPartStateService> partStateServices;
   private final int availableThreads;
 
-  public ThreadPoolGame(
+  public static void start(
+      Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
+    new ThreadPoolGame(board, renderer, delayEmulator).start();
+  }
+
+  private ThreadPoolGame(
       Board board, BoardRenderer renderer, ComputationDelayEmulator delayEmulator) {
     super(board, renderer, delayEmulator);
     availableThreads = ThreadUtils.getNumberOfAvailableThreads();

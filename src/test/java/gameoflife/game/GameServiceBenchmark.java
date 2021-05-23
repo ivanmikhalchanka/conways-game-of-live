@@ -1,5 +1,9 @@
 package gameoflife.game;
 
+import static gameoflife.game.BenchmarkStateUtils.givenBoardWithGlider;
+import static gameoflife.game.BenchmarkStateUtils.givenDefaultBoardRenderer;
+import static gameoflife.game.BenchmarkStateUtils.givenDefaultComputationDelayEmulator;
+
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -14,22 +18,34 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
     jvmArgs = {"-Xms4G", "-Xmx4G"})
 public class GameServiceBenchmark {
   @Benchmark
-  public void singleThreadBenchmark(SingleThreadExecutionPlan executionPlan) {
-    executionPlan.game.start();
+  public void singleThreadBenchmark() {
+    SingleThreadGame.start(
+        givenBoardWithGlider(),
+        givenDefaultBoardRenderer(),
+        givenDefaultComputationDelayEmulator());
   }
 
   @Benchmark
-  public void cyclicBarrierBenchmark(CyclicBarrierExecutionPlan executionPlan) {
-    executionPlan.game.start();
+  public void cyclicBarrierBenchmark() {
+    CyclicBarrierGame.start(
+        givenBoardWithGlider(),
+        givenDefaultBoardRenderer(),
+        givenDefaultComputationDelayEmulator());
   }
 
   @Benchmark
-  public void threadPoolBenchmark(ThreadPoolExecutionPlan executionPlan) {
-    executionPlan.game.start();
+  public void threadPoolBenchmark() {
+    ThreadPoolGame.start(
+        givenBoardWithGlider(),
+        givenDefaultBoardRenderer(),
+        givenDefaultComputationDelayEmulator());
   }
 
   @Benchmark
-  public void forkJoinPoolBenchmark(ForkJoinExecutionPlan executionPlan) {
-    executionPlan.game.start();
+  public void forkJoinPoolBenchmark() {
+    ForkJoinPoolGame.start(
+        givenBoardWithGlider(),
+        givenDefaultBoardRenderer(),
+        givenDefaultComputationDelayEmulator());
   }
 }

@@ -4,7 +4,6 @@ import gameoflife.emulator.ComputationDelayEmulator;
 import gameoflife.emulator.ThreadSleepComputationDelayEmulator;
 import gameoflife.factory.board.GliderBoardFactory;
 import gameoflife.game.ForkJoinPoolGame;
-import gameoflife.game.Game;
 import gameoflife.renderer.BoardRenderer;
 import gameoflife.renderer.PrintStreamBoardRenderer;
 
@@ -15,7 +14,6 @@ public class Application {
     BoardRenderer renderer = new PrintStreamBoardRenderer(System.out);
     ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator(5L);
 
-    Game game = new ForkJoinPoolGame(board, renderer, delayEmulator);
-    game.start();
+    ForkJoinPoolGame.start(board, renderer, delayEmulator);
   }
 }
