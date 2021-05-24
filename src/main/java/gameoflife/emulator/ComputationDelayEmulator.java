@@ -1,5 +1,5 @@
 package gameoflife.emulator;
 
 public interface ComputationDelayEmulator {
-  void emulateComputationDelay(int boardSize);
+  void emulateComputationDelay(int numOfItems);
 }

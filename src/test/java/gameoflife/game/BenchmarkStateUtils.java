@@ -13,7 +13,7 @@ public class BenchmarkStateUtils {
   }
 
   public static ComputationDelayEmulator givenDefaultComputationDelayEmulator() {
-    return new ThreadSleepComputationDelayEmulator(0L);
+    return new ThreadSleepComputationDelayEmulator(1L);
   }
 
   // · · ■

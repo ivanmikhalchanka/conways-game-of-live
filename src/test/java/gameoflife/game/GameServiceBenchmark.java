@@ -48,4 +48,12 @@ public class GameServiceBenchmark {
         givenDefaultBoardRenderer(),
         givenDefaultComputationDelayEmulator());
   }
+
+  @Benchmark
+  public void parallelStreamBenchmark() {
+    ParallelStreamGame.start(
+        givenBoardWithGlider(),
+        givenDefaultBoardRenderer(),
+        givenDefaultComputationDelayEmulator());
+  }
 }

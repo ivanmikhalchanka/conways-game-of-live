@@ -8,9 +8,9 @@ public class ThreadSleepComputationDelayEmulator implements ComputationDelayEmul
   }
 
   @Override
-  public void emulateComputationDelay(int boardSize) {
+  public void emulateComputationDelay(int numOfItems) {
     try {
-      Thread.sleep(boardSize * delayMultiplier);
+      Thread.sleep(numOfItems * delayMultiplier);
     } catch (InterruptedException e) {
       e.printStackTrace();
       Thread.currentThread().interrupt();
