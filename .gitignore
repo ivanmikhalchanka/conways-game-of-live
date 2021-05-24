@@ -2,3 +2,4 @@
 /build/
 /.gradle/
 /gradle/
+/src/test/generated_tests/

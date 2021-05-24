@@ -56,4 +56,12 @@ public class GameServiceBenchmark {
         givenDefaultBoardRenderer(),
         givenDefaultComputationDelayEmulator());
   }
+
+  @Benchmark
+  public void completableFutureBenchmark() {
+    CompletableFutureGame.start(
+        givenBoardWithGlider(),
+        givenDefaultBoardRenderer(),
+        givenDefaultComputationDelayEmulator());
+  }
 }

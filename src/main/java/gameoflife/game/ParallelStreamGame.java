@@ -24,7 +24,7 @@ public class ParallelStreamGame extends CachingBoardGame {
 
   @Override
   public void start() {
-    applyChangesUtilConverged(this::calculateChanges);
+    super.applyChangesUtilConverged(this::calculateChanges);
   }
 
   Stream<ActivatedCell> calculateChanges() {

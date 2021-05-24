@@ -3,7 +3,7 @@ package gameoflife;
 import gameoflife.emulator.ComputationDelayEmulator;
 import gameoflife.emulator.ThreadSleepComputationDelayEmulator;
 import gameoflife.factory.board.GliderBoardFactory;
-import gameoflife.game.ParallelStreamGame;
+import gameoflife.game.CompletableFutureGame;
 import gameoflife.renderer.BoardRenderer;
 import gameoflife.renderer.PrintStreamBoardRenderer;
 
@@ -14,6 +14,6 @@ public class Application {
     BoardRenderer renderer = new PrintStreamBoardRenderer(System.out);
     ComputationDelayEmulator delayEmulator = new ThreadSleepComputationDelayEmulator(5L);
 
-    ParallelStreamGame.start(board, renderer, delayEmulator);
+    CompletableFutureGame.start(board, renderer, delayEmulator);
   }
 }
