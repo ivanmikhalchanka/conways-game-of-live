@@ -33,7 +33,7 @@ on [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 | ThreadPool      | avgt |   5 | 6.073 ± | 4.685 | ms/op |
 | ForkJoinPool    | avgt |   5 | 5.755 ± | 0.019 | ms/op |
 
-##### With number of cells to process by task delay
+##### With delay equal to number of cells to process
 
 | Benchmark         | Mode | Cnt | Score      | Error   | Units |
 |-------------------|------|-----|------------|---------|-------|
